@@ -24,7 +24,17 @@ export default function Home() {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved) {
-        setProfile(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        // 기존 대학생 소개글이 캐시되어 있는 경우 새 개발자 소개글로 자동 업데이트
+        if (
+          !parsed.bio ||
+          parsed.bio === "안녕하세요! 바이브 코딩을 배우고 있는 대학생입니다."
+        ) {
+          parsed.bio = initialProfile.bio;
+          parsed.title = initialProfile.title;
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(parsed));
+        }
+        setProfile(parsed);
       }
     } catch {
       console.error("Failed to load profile from localStorage");
@@ -71,9 +81,9 @@ export default function Home() {
 
   // Reset profile to initial default
   const handleResetProfile = () => {
-    if (confirm("프로필 데이터를 초기 상태로 복원하시겠습니까?")) {
+    if (confirm("프로필 데이터를 기본 개발자 프로필 상태로 복원하시겠습니까?")) {
       saveProfile(initialProfile);
-      triggerToast("박제우 님의 기본 프로필로 복원되었습니다.");
+      triggerToast("기본 개발자 프로필로 복원되었습니다. 🚀");
     }
   };
 

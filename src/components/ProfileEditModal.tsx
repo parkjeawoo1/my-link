@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Profile, LinkItem, SocialLinks } from "@/types/link";
-import { AVATAR_PRESETS } from "@/data/defaultProfile";
+import { AVATAR_PRESETS, DEV_BIO_TEMPLATES } from "@/data/defaultProfile";
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -285,9 +285,46 @@ export default function ProfileEditModal({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  소개글 (Bio)
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-300">
+                    소개글 (Bio)
+                  </label>
+                  <span className="text-[11px] text-indigo-400">
+                    ✨ 개발자 추천 소개글 빠른 적용
+                  </span>
+                </div>
+
+                {/* 개발자 추천 소개글 템플릿 목록 */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2.5">
+                  {DEV_BIO_TEMPLATES.map((tmpl, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          title: tmpl.title,
+                          bio: tmpl.bio,
+                        }))
+                      }
+                      title="클릭하여 직함과 소개글에 자동 적용"
+                      className="text-left p-2 rounded-xl bg-slate-800/80 hover:bg-slate-750 border border-slate-750 hover:border-indigo-500/60 transition cursor-pointer group"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-slate-200 group-hover:text-indigo-300">
+                          {tmpl.label}
+                        </span>
+                        <span className="text-[10px] text-slate-500 group-hover:text-indigo-400">
+                          적용 &rarr;
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                        {tmpl.bio}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+
                 <textarea
                   name="bio"
                   rows={3}
